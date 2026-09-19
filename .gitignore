@@ -1,0 +1,12 @@
+# Сборка CMake
+build/
+bin/
+lib/
+CMakeUserPresets.json
+compile_commands.json
+
+# Временные файлы IDE и ОС
+.vscode/
+.idea/
+*.swp
+*.DS_Store
