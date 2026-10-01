@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 #include <queue>
+#include <unordered_map>
 
 namespace algos{
 // Huffman coding class
@@ -110,6 +111,41 @@ public:
             return {};
         get_codes(start, root_, code_table);
         return code_table;
+    }
+
+    bool huffman_decode(const std::string& in_path, const std::string& out_path, std::array <std::string, 256> code_table){
+        std::ifstream in_file(in_path, std::ios::binary);
+        if(!in_file.is_open()){
+            std::cerr << "Input file opening error\n";
+            return false;
+        }
+        std::ofstream out_file(out_path, std::ios::binary);
+        if(!out_file.is_open()){
+            std::cerr << "Output file opening error\n";
+            return false;
+        }
+        std::unordered_map<std::string, unsigned char> codes;
+        for(int i = 0;i < code_table.size();i++){
+            if(!code_table[i].empty())
+                codes[code_table[i]] = static_cast<unsigned char>(i);
+        }
+        char c;
+        std::string cur;
+        while (in_file.get(c))
+        {
+            cur.push_back(c);
+            if(codes.contains(cur)){
+                out_file << codes[cur];
+                cur = "";
+            }
+        }
+
+        if (!cur.empty()) {
+            std::cerr << "Warning: trailing undecoded bits remain!\n";
+        }
+
+        return true;
+        
     }
 
 };
